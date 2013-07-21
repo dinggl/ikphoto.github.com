@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title></title>
+<link href="../css/basic.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+<style>
+    #folder {
+        width: 880px;
+        height: 650px;
+        margin: auto;
+        margin-top: 50px;
+        border: 2px solid gray;
+        -moz-border-radius: 5px; /* Gecko browsers */
+        -webkit-border-radius: 5px; /* Webkit browsers */
+        border-radius: 5px; /* W3C syntax */
+        box-shadow: 0 1px 3px #BBBBBB;
+        background-color: white;
+        position: relative;
+
+    }
+
+    #opertaion {
+        width: 100%;
+        height: 50px;
+        padding-top: 20px;
+    }
+
+    #create {
+        float: left;
+        height: 32px;
+        margin-left: 100px;
+    }
+
+    #create img {
+        float: left;
+        width: 32px;
+        height: 32px;
+    }
+
+    #create span {
+        float: left;
+        line-height: 32px;
+        font-weight: bold;
+        height: 32px;
+    }
+
+    #upload {
+        float: left;
+        height: 32px;
+        margin-left: 300px;
+    }
+
+    #upload img {
+        float: left;
+        height: 32px;
+        width: 32px;
+    }
+
+    #upload span {
+        float: left;
+        line-height: 32px;
+        font-weight: bold;
+        height: 32px;
+    }
+
+    #folder ul {
+        list-style: none;
+    }
+
+    .lione {
+        float: left;
+        width: 170px;
+        margin: 5px 25px 5px 25px;
+    }
+
+    .folder_img {
+        width: 140px;
+        height: 120px;
+        margin: 2px 15px 0px 15px;
+    }
+
+    .folder_desc {
+      
+    }
+    
+    .folder_desc .name
+    {
+    float:left;
+    margin-left:25px;
+    } 
+    
+    .folder_desc .size
+    {
+    float:right;
+    margin-right:25px;
+    }
+
+    .folder_column {
+        list-style: none;
+
+    }
+
+    .folder_column li {
+        height: 160px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    #scroll_div {
+        margin-top: 5px;
+        width: 880px;
+        overflow: hidden;
+    }
+
+    #folder_ul_scroll {
+        width: 880px;
+    }
+
+    #nav {
+        position: absolute;
+        bottom: 0px;
+        right: 10px;
+    }
+
+    #left {
+    }
+
+    #right {
+    }
+
+    #mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index: 5;
+        filter: alpha(opacity = 0.3); /*IE*/
+        opacity: 0.3; /*谷歌 火狐*/
+        display: none;
+    }
+
+    #uploader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 700px;
+        height: 500px;
+        margin-top: -250px;
+        margin-left: -350px;
+        border: 2px solid gray;
+        -moz-border-radius: 5px; /* Gecko browsers */
+        -webkit-border-radius: 5px; /* Webkit browsers */
+        border-radius: 5px; /* W3C syntax */
+        filter: alpha(opacity = 1); /*IE*/
+        opacity: 1; /*谷歌 火狐*/
+        box-shadow: 0 1px 3px black;
+        background: white;
+        display: none;
+        z-index: 6;
+    }
+
+    #close {
+        float: right;
+        padding: 1px;
+    }
+
+    #uploader hr {
+        box-shadow: 0 1px 3px black;
+    }
+
+    #content {
+        height: 450px;
+        margin: auto;
+        width: 100%;
+    }
+
+    #button {
+        width: 100%;
+        height: 40px;
+    }
+
+    #button span {
+        float: right;
+    }
+
+    #page {
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript" src="../lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+/*alert($(window).height()); //浏览器时下窗口可视区域高度
+alert($(document).height()); //浏览器时下窗口文档的高度
+alert($(document.body).height());//浏览器时下窗口文档body的高度
+alert($(document.body).outerHeight(true));//浏览器时下窗口文档body的总高度 包括border padding margin
+
+alert($(window).width()); //浏览器时下窗口可视区域宽度
+alert($(document).width());//浏览器时下窗口文档对于象宽度
+alert($(document.body).width());//浏览器时下窗口文档body的高度
+alert($(document.body).outerWidth(true));//浏览器时下窗口文档body的总宽度 包括border padding margin
+ 
+alert($(document).scrollTop()); //获取滚动条到顶部的垂直高度
+alert($(document).scrollLeft()); //获取滚动条到左边的垂直宽度*/
+    var util = {currentPage:1,
+    totalPage:1,
+    totalFolder:12};
+    $().ready(function () {
+
+        function getFolderCell(msg)
+        {
+            return '<li>'+
+                   '<div class="img_container"><img  folderID="'+msg.id
+                   +'"class="folder_img" src="../images/folder-gray.png"></div>'+
+                   '<div class="folder_desc"><span class="name" >'+msg.name+'</span><span class="size" >'+msg.size+'张</span></div>'+
+                   '</li>';
+        }
+        function getFolderColumn(msg)
+        {
+            return '<li class="lione">'+
+                    '<ul class="folder_column">'+
+                    getFolderCell(msg)+
+                    '</ul>'+
+                    '</li>';
+        }
+        function folder_img_mouseover() {
+            var temp = $(this);
+            temp.attr("src", "../images/folder-open.png");
+            temp.parent().parent().css("background", "#F0F1F4").css("border", "1px solid black");
+        }
+        function folder_img_mouseout()
+        {
+            var temp = $(this);
+            temp.attr("src", "../images/folder-gray.png");
+            temp.parent().parent().css("background", "white").css("border", "0px");
+        }
+        function folder_img_click()
+        {
+            window.location.href = "photo.html";
+        }
+        $(".folder_img").mouseover(folder_img_mouseover).mouseout(folder_img_mouseout).click(folder_img_click);
+
+        $("#left").click(function () {
+            var scroll = $("#scroll_div");
+            scroll.animate({scrollLeft: scroll.scrollLeft() - 900}, 1000);
+        }).mouseover(function () {
+                    $(this).css("background-color", "#F0F1F4").css("border", "1px solid black");
+                }).mouseout(function () {
+                    $(this).css("background-color", "white").css("border", "0px");
+                });
+
+        $("#right").click(function () {
+            var scroll = $("#scroll_div");
+            scroll.animate({scrollLeft: scroll.scrollLeft() + 900}, 1000);
+        }).mouseover(function () {
+                    $(this).css("background-color", "#F0F1F4").css("border", "1px solid black");
+                }).mouseout(function () {
+                    $(this).css("background-color", "white").css("border", "0px");
+                });
+
+        $("#create").mouseover(function () {
+                    $(this).css("background-color", "#F0F1F4").css("border", "1px solid black");
+                }).mouseout(function () {
+                    $(this).css("background-color", "white").css("border", "0px");
+                });
+        $("#upload").mouseover(function () {
+            $(this).css("background-color", "#F0F1F4").css("border", "1px solid black");
+        }).mouseout(function () {
+                    $(this).css("background-color", "white").css("border", "0px");
+                });
+
+        $("#upload").click(function () {
+            $("#mask").show();
+            $("#uploader").show();
+        });
+        
+        $("#content").mousedown(function(e){
+        console.dir(e);}).mousemove(function(e){
+        console.dir(e);}).click(function(){console.log(1);});
+        
+        $("#create").click(function () {
+
+		$.ajax({
+		  type: "POST",
+		  url: "folder_createNewFolder"
+		}).done(function( msg ) {
+		   var totalFolder = util.totalFolder+1;
+             var totalPage = Math.ceil(totalFolder / 12);
+             var folder_ul_scroll =   $("#folder_ul_scroll");
+             if(totalPage > util.totalPage)
+             {
+                 folder_ul_scroll.css("width",totalPage*880);
+                 $("#scroll_div").scrollLeft((totalPage)*880);
+             }
+            var liindex = Math.ceil(totalFolder/3);
+            var children =   folder_ul_scroll.children();
+            if(liindex <= children.length)
+            {
+                   //在最后一个li上加
+                var li = children.eq(-1);
+                var content =  getFolderCell(msg);
+                li.children().append(content);
+            }
+            else
+            {
+                    //创建新的li，并在它上面加
+                var  content = getFolderColumn(msg);
+                folder_ul_scroll.append(content);
+            }
+            $(".folder_img").mouseover(folder_img_mouseover).mouseout(folder_img_mouseout).click(folder_img_click);
+		});
+        });
+
+        $("#close").click(function () {
+            $("#mask").hide();
+            $("#uploader").hide();
+        });
+    });
+</script>
+</head>
+<body>
+<div id="mask">
+
+</div>
+<div id="uploader">
+    <img id="close" src="../images/close.png">
+
+    <div style="clear: both"></div>
+
+    <div id="content"></div>
+
+    <div id="button"><span>上传</span><span>继续添加</span></div>
+</div>
+<div class="header">
+    <div class="header_container">
+        <img src="../images/logo.png" class="header_logo"/>
+        <ul class="header-nav">
+            <li>
+                <a class="nav-item yahei " href="folders.html">我的相册</a>
+            </li>
+            <li>
+                <a class="nav-item yahei " href="/plaza">图片广场</a>
+            </li>
+        </ul>
+        <div class="member">小明
+            <ul class="member_ul">
+                <li>设置</li>
+                <li>换肤</li>
+                <li>帮助</li>
+                <li>退出</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="folder">
+    <div id="opertaion">
+        <div id="create"><img src="../images/create.png"><span>创建相册</span></div>
+        <div id="upload"><img src="../images/upload.png"><span >上传照片</span></div>
+    </div>
+    <div id="scroll_div">
+        <ul id="folder_ul_scroll">
+            <li class="lione">
+                <ul class="folder_column">
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span class="name">name</span><span class="size">size</span> </div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                </ul>
+            </li>
+            <li class="lione">
+                <ul class="folder_column">
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                </ul>
+            </li>
+            <li class="lione">
+                <ul class="folder_column">
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span>  </div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                </ul>
+            </li>
+            <li class="lione">
+                <ul class="folder_column">
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span> </div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                    <li>
+                        <div class="img_container"><img class="folder_img" src="../images/folder-gray.png"></div>
+                        <div class="folder_desc"><span>name</span><span>size</span></div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="nav"><img id="left" src="../images/arrow-left.png"> <img id="right" src="../images/arrow-right.png"><span
+            id="page">1/2</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+*, html, body,span{
+    font-family: "宋体","微软雅黑",Arial;
+    cursor: pointer;
+}
+html, body {
+    height: 100%;
+}
+
+
+body {
+   /* background-color: #F0F1F4;*/
+    background-image: url(../images/bg.jpg) ;
+}
+*, html, body {
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+}
