@@ -48,6 +48,11 @@ if(folders!=null)
             height: 30px;
             width: 800px;
         }
+        .size-selector
+        {
+        width:100%;
+        }
+        
         .column {
             float: left;
             margin: 5px 5px 15px 5px;
@@ -391,6 +396,25 @@ if(folders!=null)
     color:#BBBBBB;
     }
 
+   #searchInput
+   {
+   float:left;
+   margin-top:10px;
+   height:25px;
+   }
+   #searchInput img
+   {
+   float:left;
+   }
+   .menu-filter
+        {
+        float:right;
+        }
+        #searchKey
+        {
+        height:25px;
+        font-weight:bold;
+        }
     </style>
 <link rel="stylesheet" type="text/css" href="../css/header.css" />
 </head>
@@ -750,6 +774,46 @@ if(folders!=null)
                     $("#loading").hide();
                 },500);
                 
+                $("#searchKey").keyup(function(){ 
+                	var _this = $(this);
+                	var value = _this.val();
+                    if(value.length%2==0)
+                    {
+                    	var last = _this.attr("last");
+                    	if(value.length==0&&last==null)
+                    	{
+                    		return;
+                    	}
+                    	var flag = false;
+                    	if(last!=null)
+                    	{
+                    		if(last.length!=value.length||(last.length==value.length&&last!=value))
+                    		{
+                    			flag = true;
+                    		}
+                    	}
+                    	else
+                    	{
+                    		flag = true;
+                    	}
+                    	_this.attr("last",value);
+                    	if(flag)
+                    	{
+                    		$.ajax({
+                      		  type: "POST",
+                      		  url: "folder_listPhotos",
+                      		  data:{search:value}}).done(function( msg ) {
+                      			util.array = msg;
+                      			var columns =$(".column");
+                      			var el = $(columns.eq(0)).children().eq(0);
+                    			columns.html("");
+                    			$(columns.eq(0)).append(el);
+                      			init();
+                      		});
+                    	}
+                    	 
+                    }
+                });
             }
     );
 
@@ -760,10 +824,10 @@ if(folders!=null)
         <img src="../images/logo.png" class="header_logo"/>
         <ul class="header-nav">
             <li>
-                <a class="nav-item yahei " href="folder_folders">我的相册</a>
+                <a  href="folder_folders" >我的相册</a>
             </li>
             <li>
-                <a class="nav-item yahei " href="folder_photo">图片广场</a>
+                <a  href="folder_photo" >图片广场</a>
             </li>
         </ul>
         <div class="member">移动版本下载
@@ -875,28 +939,16 @@ if(folders!=null)
             
         </ul>
         <div class="div_column">
-            <ul class="menu-filter">
-                <li class="first on">
-                    <a class="on" label="0" hidefocus="hidefocus" href="#1"></a>
-                </li>
-                <li class="last">
-                    <a class="" label="1" hidefocus="hidefocus" href="#2"></a>
-                </li>
-            </ul>
             <div class="size-selector">
-
+                 <div id="searchInput"><img src="../images/search.png"><input id="searchKey" type="text" ></div>
+                 
                 <ul class="menu-filter">
-                    <li class="first">
-                        <a label="1" hidefocus="hidefocus" href="#3">
-                            <span class="l-size-ico"></span>
-                        </a>
-                    </li>
-                    <li class="first">
-                            <span class="l-size-ico">大图</span>
+                    <li >
+                            <span>大图</span>
                     </li>
                     
-                    <li class="last on">
-                            <span class="m-size-ico">中图</span>
+                    <li >
+                            <span >中图</span>
                     </li>
                 </ul>
                 </div>
