@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="../css/basic.css" rel="stylesheet" type="text/css">
+    <style>
+
+
+        .div_column
+        {
+            float: left;
+            margin: 5px 5px 15px 5px;
+            padding: 0px;
+            list-style: none;
+            top: 0px;
+            height: 30px;
+            width: 960px;
+        }
+        .column {
+            float: left;
+            margin: 5px 5px 15px 5px;
+            padding: 0px;
+            list-style: none;
+            top: 0px;
+            width: 238px;
+        }
+
+        .column_li {
+            width: 238px;
+            border-left: medium none;
+            box-shadow: 0 1px 3px #BBBBBB;
+            margin-top: 8px;
+        }
+
+        .div_photo {
+            padding: 5px;
+            background-color: white;
+            position: relative;/*方便子元素相对于它绝对定位*/
+        }
+
+        .main {
+            width: 1243px;
+            margin: auto;
+            height: 100%;
+        }
+
+        .photo {
+            width: 1240px;
+            margin-left: 3px;
+        }
+
+        .img_div
+        {
+            width: 100%;
+            position: relative;
+        }
+        .img_highlight
+        {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            filter:alpha(opacity=0);/*IE*/
+            opacity: 0;/*谷歌 火狐*/
+            top:0px;
+            z-index: 10;
+            background-color: white;
+        }
+        .img
+        {
+            width: 100%;
+        }
+
+        .label
+        {
+            margin-top: 2px;
+            padding-left: 5px;
+            padding-right: 5px;
+            height: 25px;
+            font-family: Arial;
+            font-size:	12px;
+            font-weight:400;
+            font-style:normal;
+            font-size-adjust:none;
+            color:#222222;
+            text-decoration:none;
+            line-height:14px;
+            vertical-align:baseline;
+        }
+        .label_folder
+        {
+            padding: 0px;
+            float: left;
+        }
+        .label_size
+        {
+            color: #888888;
+            float: right;
+        }
+
+        .label_ul
+        {
+            padding: 0px;
+            list-style: none;
+        }
+       .label_ul li
+        {
+            float: left;
+            margin: 0 8px 8px 0;
+        }
+        .label_ul li span
+        {
+            border: 1px solid #dedede;
+            -moz-border-radius: 5px;      /* Gecko browsers */
+            -webkit-border-radius: 5px;   /* Webkit browsers */
+            border-radius:5px;            /* W3C syntax */
+            box-shadow: 1 1px 1px #BBBBBB;
+            text-align: center;
+            line-height: 22px;
+            padding: 2px 3px 2px 3px;
+
+        }
+
+        .corner
+        {
+            position: absolute;
+            bottom: -3px;
+            height: 21px;
+            position: absolute;
+            right: -4px ;
+            width: 21px;
+        }
+
+        .menu-filter
+        {
+            list-style: none;
+            float: left;
+            padding: 15px  0px  0px 5px;
+        }
+        .menu-filter li
+        {
+            float: left;
+        }
+
+        .size-selector
+        {
+            float: right;
+            right: 15px;
+        }
+
+        #banner_div
+        {
+            width: 100%;
+            padding: 15px 0px 0px 0px;
+            background-color: #2B2E35;
+            height: 193px;
+        }
+        #banner
+        {
+            width: 1164px;
+            margin: auto;
+            position: relative;
+            height: 162px;
+        }
+
+        #folders
+        {
+            width:1044px;
+            height: 162px;
+            margin: auto;
+            list-style: none;
+            overflow: hidden;
+            /*overflow-x:scroll;*/
+        }
+        #folders_ul
+        {
+            width: 2088px;
+        }
+        #folders li
+        {
+            border: 1px solid #1F1F1F;
+            cursor: pointer;
+            display: inline-block;
+            float: left;
+            height: 162px;
+            margin-right: 12px;
+            position: relative;
+            white-space: normal;
+            width: 162px;
+
+        }
+        .folder_div
+        {
+           position: absolute;
+            width: 162px;
+            height: 50px;
+            bottom: 0px;
+            left: 0px;
+            filter:alpha(opacity=30);/*IE*/
+            opacity: 0.3;/*谷歌 火狐*/
+            z-index: 5;
+            background-color: #0000ff;
+            color: #FFFFFF;
+            font-size: 12px;
+            letter-spacing: 1px;
+            line-height: 20px;
+        }
+         .highlight
+         {
+             position: absolute;
+             width: 100%;
+             height: 100%;
+             filter:alpha(opacity=0);/*IE*/
+             opacity: 0;/*谷歌 火狐*/
+             top:0px;
+             z-index: 10;
+             background-color: white;
+         }
+        .folder_name
+        {
+            position: relative;
+            float: left;
+            top: 10px;
+            margin-left: 10px;
+        }
+
+        .folder_size
+        {
+            position: relative;
+            top: 10px;
+            float: right;;
+            margin-right: 10px;
+        }
+
+        #folders li img
+        {
+            width: 162px;
+            height: 162px;
+            -moz-border-radius: 5px;      /* Gecko browsers */
+            -webkit-border-radius: 5px;   /* Webkit browsers */
+            border-radius:5px;            /* W3C syntax */
+        }
+        #nav
+        {
+            width: 100%;
+            position: absolute;
+            top: 60px;
+            height: 50px;
+            z-index: 5;
+        }
+        .arrow_left
+        {
+            float:left;
+            top: 0px;
+            margin-left: 3px;
+            width: 50px;
+            height: 50px;
+        }
+        .arrow_right
+        {
+            float:right;
+            top:0px;
+            margin-right: 3px;
+            width: 50px;
+            height: 50px;
+        }
+        #slider
+        {
+            width: 1164px;
+            height: 29px;
+            margin: auto;
+            text-align: center;
+            font-size: 10px;
+            line-height: 27px;
+            letter-spacing:3px;
+        }
+
+        #slider a
+        {
+            text-decoration:none;
+            color: white;;
+        }
+        .loading
+        {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            left: 50%;
+            margin-left: -40px;
+            top: 50%;
+            margin-top: -50px;
+            z-index: 5;
+        }
+
+        .detail
+        {
+            width: 35px;
+            height: 20px;
+            left: 10px;
+            top: 10px;
+            position: absolute;
+            z-index: 6;
+        }
+
+        .download
+        {
+            width: 35px;
+            height: 20px;
+            right: 10px;
+            top: 10px;
+            position: absolute;
+            z-index: 6;
+        }
+
+    .mask
+    {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #f5deb3;
+    }
+
+    #float
+    {
+        position: absolute;
+        display: none;
+    }
+
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="../css/header.css" />
+<script type="text/javascript" src="../lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $().ready(
+            function()
+            {
+                $(".arrow_right").click(function(evt)
+                {
+                    console.log($('#folders').scrollLeft());
+                    var folders = $('#folders');
+                    folders.animate({
+                        scrollLeft:folders.scrollLeft()+1044
+                    }, 1000 );
+                });
+
+                $(".arrow_left").click(function(evt)
+                {
+                    console.log($('#folders').scrollLeft());
+                    var folders = $('#folders');
+                    folders.animate({
+                        scrollLeft:folders.scrollLeft()-1044
+                    }, 1000 );
+                });
+
+                $(".highlight").mouseover(function()
+                {
+                    $(this).animate({opacity:0.3},300);
+                }).mouseout(function(){
+                            $(this).animate({opacity:0},300);
+                        });
+                $(".img_highlight").mouseover(function()
+                {
+                    $(this).animate({opacity:0.3},300);
+                }).mouseout(function(){
+                            $(this).animate({opacity:0},300);
+                        });
+
+
+                $('.member').hover(function () {
+                    $(this).css('background', 'url(../images/arrow2.png) no-repeat 55px center');
+
+                    $('.member_ul').show().animate({
+                            opacity : 100,
+                            height : 120
+                    });
+                }, function () {
+                    $(this).css('background', 'url(../images/arrow.png) no-repeat 55px center');
+                    $('.member_ul').animate(
+                        {
+                            opacity : 0,
+                            height : 0
+                        },
+                        function () {
+                            $('.member_ul').hide();
+                        }
+                    );
+                });
+
+                $(window).scroll(function(evt) {
+                    var top =  parseFloat($(window).scrollTop());
+                    if(top==0)
+                    {
+                        $("#float").hide();
+                    }
+                    else
+                    {
+                    $("#float").show().css("top",top);
+                    }
+                });
+            }
+    );
+
+</script>
+</head>
+<body style="background-color:#F0F1F4;">
+<div class="header" id="float">
+    <div class="header_container">
+        <img src="../images/logo.png" class="header_logo"/>
+        <ul class="header-nav">
+            <li>
+                <a class="nav-item yahei " href="folders.html">我的相册</a>
+            </li>
+            <li>
+                <a class="nav-item yahei " href="/plaza">图片广场</a>
+            </li>
+        </ul>
+        <div class="member">小明
+            <ul class="member_ul">
+                <li>设置</li>
+                <li>换肤</li>
+                <li>帮助</li>
+                <li>退出</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="header_container">
+        <img src="../images/logo.png" class="header_logo"/>
+        <ul class="header-nav">
+            <li>
+                <a class="nav-item yahei " href="folders.html">我的相册</a>
+            </li>
+            <li>
+                <a class="nav-item yahei " href="/plaza">图片广场</a>
+            </li>
+        </ul>
+        <div class="member">小明
+            <ul class="member_ul">
+                <li>设置</li>
+                <li>换肤</li>
+                <li>帮助</li>
+                <li>退出</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="banner_div">
+    <div id="banner">
+        <div id="folders">
+            <ul id="folders_ul" >
+                <li><img src="../images/1.jpg" />
+                <div></div></li>
+                <li><img src="../images/1.jpg" /><div class="folder_div"><span class="folder_name">xxx文件夹</span><span class="folder_size" >55张</span></div>
+                <div class="highlight"></div></li>
+                <li><img src="../images/1.jpg" /></li>
+                <li><img src="../images/1.jpg" /></li>
+                <li><img src="../images/1.jpg" /></li>
+                <li><img src="../images/1.jpg" /></li>
+                <li><img src="../images/1.jpg" /></li>
+                <li><img src="../images/1.jpg" /></li>
+            </ul>
+        </div>
+        <div id="nav">
+            <img src="../images/arrow2.png" class="arrow_left">
+            <img src="../images/arrow.png" class="arrow_right">
+        </div>
+    </div>
+    <div id="slider">
+        <a class="on" onfocus="this.blur();" onclick="null" href="javascript:void(0);">●</a>
+        <a class="" onfocus="this.blur();" onclick="null" href="javascript:void(0);">●</a>
+        <a class="" onfocus="this.blur();" onclick="null" href="javascript:void(0);">●</a>
+        <a class="" onfocus="this.blur();" onclick="null" href="javascript:void(0);">●</a>
+        <a class="" onfocus="this.blur();" onclick="null" href="javascript:void(0);">●</a>
+    </div>
+    </div>
+</div>
+<div class="main">
+    <div class="photo">
+        <ul class="column">
+            <li class="column_li">
+                <div class="div_photo" >
+                    <ul class="label_ul">
+                        <li >
+                           <span>全部</span>
+                        </li>
+                        <li >
+                            <span>性感</span>
+                        </li>
+                        <li>
+                            <span>性感3434</span>
+                        </li>
+                        <li>
+                            <span>性感1111111</span>
+                        </li>
+                        <li>
+                            <span>性感2222</span>
+                        </li>
+                        <li>
+                            <span>性感333</span>
+                        </li>
+                    </ul>
+
+                    <div style="clear: both"></div>
+                    <div class="corner">corner</div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img  class="img" src="../images/logo.gif"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img  class="img" src="../images/logo.gif"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img class="img" src="../images/1.jpg"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="div_column">
+            <ul class="menu-filter">
+                <li class="first on">
+                    <a class="on" label="0" hidefocus="hidefocus" href="#1">最新</a>
+                </li>
+                <li class="last">
+                    <a class="" label="1" hidefocus="hidefocus" href="#2">本周最热</a>
+                </li>
+            </ul>
+            <div class="size-selector">
+
+                <ul class="menu-filter">
+                    <li class="first">
+                        <a label="1" hidefocus="hidefocus" href="#3">
+                            <span class="l-size-ico">图片尺寸</span>
+                        </a>
+                    </li>
+                    <li class="first">
+                        <a label="1" hidefocus="hidefocus" href="#3">
+                            <span class="l-size-ico">大图</span>
+                        </a>
+                    </li>
+                    <li class="last on">
+                        <a class="on" label="0" hidefocus="hidefocus" href="#4">
+                            <span class="m-size-ico">中图</span>
+                        </a>
+                    </li>
+                </ul>
+                </div>
+        </div>
+        <ul class="column">
+
+            <li class="column_li">
+                <div class="div_photo">
+                    <img src="../images/loadingPD.gif" class="loading" />
+                    <img src="../images/arrow.png" class="detail" />
+                    <img src="../images/arrow2.png" class="download" />
+                    <div class="img_div">
+                        <img class="img" src="../images/1.jpg"/>
+                        <div class="img_highlight"></div>
+                    </div>
+
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img src="../images/loadingPD.gif" class="loading" />
+                    <img  class="img" src="../images/logo.gif"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+
+                <div class="div_photo">
+                    <img src="../images/loadingPD.gif" class="loading" />
+                    <img class="img" src="../images/wait_load.jpg"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="column">
+            <li class="column_li">
+                <div class="div_photo">
+                    <img  class="img" src="../images/logo.gif"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img class="img" src="../images/1.jpg"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="column">
+            <li class="column_li">
+                <div class="div_photo">
+                    <img  class="img" src="../images/logo.gif"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img class="img" src="../images/1.jpg"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            </ul>
+        <ul class="column">
+            <li class="column_li">
+                <div class="div_photo">
+                    <img  class="img" src="../images/logo.gif"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="column_li">
+                <div class="div_photo">
+                    <img class="img" src="../images/1.jpg"/>
+                    <div class="label">
+                        <div class="label_label">5555</div>
+                        <div><div class="label_folder">3434</div><div class="label_size">400*400</div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <div style="clear: both"></div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -3,6 +3,8 @@
 	"-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
 	"http://struts.apache.org/dtds/struts-2.1.dtd">
 
+
+
 <struts>
 	<!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->
 	<constant name="struts.configuration.xml.reload" value="true" />
@@ -14,9 +16,16 @@
 	<constant name="struts.i18n.encoding" value="UTF-8" />
 	<!-- 指定允许上传的文件最大字节数。默认值是2097152(2M) -->
 	<constant name="struts.multipart.maxSize" value="10701096" />
+	<package name="index" extends="struts-base" namespace="/">
+		<default-action-ref name="index"></default-action-ref>
+		<action name="index">
+			<result>/folder/folders.jsp</result>
+		</action>
+	</package>
 	<package name="folder" extends="struts-default" namespace="/folder">
 		<default-action-ref name="error" />
-		<action name="folder_*" class="com.baidu.action.FolderAction" method="{1}">
+		<action name="folder_*" class="com.baidu.action.FolderAction"
+			method="{1}">
 			<result name="folders">/folder/folders.jsp</result>
 			<result name="upload">/folder/uploader.jsp</result>
 			<result name="photo">/folder/photo.jsp</result>

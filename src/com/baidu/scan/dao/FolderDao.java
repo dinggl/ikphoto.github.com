@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.baidu.scan.model.Folder;
 import com.baidu.scan.model.Photo;
 
-
 @Component("folderDao")
 public class FolderDao {
 	private HibernateTemplate hibernateTemplate;
@@ -36,12 +35,13 @@ public class FolderDao {
 	@SuppressWarnings("unchecked")
 	public List<Folder> listFolders() {
 		// TODO Auto-generated method stub
-		return (List<Folder>)this.hibernateTemplate.find("from Folder");
+		return (List<Folder>) this.hibernateTemplate.find("from Folder");
 	}
 
 	public Folder updateFolderName(int folderid, String newName) {
 		// TODO Auto-generated method stub
-		Folder folder = (Folder) this.hibernateTemplate.get(Folder.class,folderid);
+		Folder folder = (Folder) this.hibernateTemplate.get(Folder.class,
+				folderid);
 		folder.setName(newName);
 		this.hibernateTemplate.update(folder);
 		return folder;
@@ -70,27 +70,31 @@ public class FolderDao {
 	@SuppressWarnings("unchecked")
 	public List<Photo> listPhotos(int folderid) {
 		// TODO Auto-generated method stub
-		return (List<Photo>)this.hibernateTemplate.find("from Photo where folder.id = "+folderid);
+		return (List<Photo>) this.hibernateTemplate
+				.find("from Photo where folder.id = " + folderid);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Folder> listFullFolders() {
 		// TODO Auto-generated method stub
-		return (List<Folder>)(this.hibernateTemplate.find("from Folder where size > 0"));
+		return (List<Folder>) (this.hibernateTemplate
+				.find("from Folder where size > 0"));
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Photo> listMarks() {
 		// TODO Auto-generated method stub
-		return (List<Photo>)(this.hibernateTemplate.find("from Photo where description !='' "));
+		return (List<Photo>) (this.hibernateTemplate
+				.find("from Photo where description !='' "));
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Photo> listPhotos(String search) {
 		// TODO Auto-generated method stub
-		if(search.equals("null"))
-			return  (List<Photo>)this.hibernateTemplate.find("from Photo");
-		return (List<Photo>)this.hibernateTemplate.find("from Photo where  description like '%"+search+"%'");
+		if (search.equals("null"))
+			return (List<Photo>) this.hibernateTemplate.find("from Photo");
+		return (List<Photo>) this.hibernateTemplate
+				.find("from Photo where  description like '%" + search + "%'");
 	}
 
 	public Photo updatePhotoMark(int photoid, String newMark) {
@@ -99,6 +103,6 @@ public class FolderDao {
 		photo.setDescription(newMark);
 		this.hibernateTemplate.update(photo);
 		return photo;
-	} 
+	}
 
 }

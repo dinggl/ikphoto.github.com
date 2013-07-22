@@ -23,8 +23,8 @@ import com.baidu.util.UUID;
 import com.baidu.util.Util;
 import com.google.gson.reflect.TypeToken;
 import com.opensymphony.xwork2.ActionSupport;
-public class FolderAction extends ActionSupport implements
-		ServletResponseAware {
+
+public class FolderAction extends ActionSupport implements ServletResponseAware {
 	private HttpServletResponse servletResponse;
 
 	/**
@@ -35,36 +35,37 @@ public class FolderAction extends ActionSupport implements
 	public FolderAction() {
 		// TODO Auto-generated constructor stub
 	}
+
 	private FolderService folderService;
 
 	public FolderService getFolderService() {
 		return folderService;
 	}
- 
-	@Resource(name="folderService")
+
+	@Resource(name = "folderService")
 	public void setFolderService(FolderService folderService) {
 		this.folderService = folderService;
-	} 
-	
-	public void createNewFolder()
-	{
+	}
+
+	public void createNewFolder() {
 		Folder folder = folderService.createNewFolder();
 		response(Util.Entity2Json(folder));
 	}
-	public void response(String response)
-	{
-		ServletActionContext.getResponse()
-		.setContentType("text/json;charset=UTF-8");
-        try {
+
+	public void response(String response) {
+		ServletActionContext.getResponse().setContentType(
+				"text/json;charset=UTF-8");
+		try {
 			ServletActionContext.getResponse().getWriter().write(response);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	private int folderid=-1;
+
+	private int folderid = -1;
 	private String newName;
+
 	public int getFolderid() {
 		return folderid;
 	}
@@ -81,15 +82,15 @@ public class FolderAction extends ActionSupport implements
 		this.newName = newName;
 	}
 
-	public void updateFolderName()
-	{
-		
-		Folder folder = this.folderService.updateFolderName(folderid,newName);
+	public void updateFolderName() {
+
+		Folder folder = this.folderService.updateFolderName(folderid, newName);
 		folder.setPhotos(null);
 		folder.setFengmian(null);
 		response(Util.Entity2Json(folder));
 	}
-	   public String getImageFileName() {
+
+	public String getImageFileName() {
 		return imageFileName;
 	}
 
@@ -104,9 +105,10 @@ public class FolderAction extends ActionSupport implements
 	public void setImageContentType(String imageContentType) {
 		this.imageContentType = imageContentType;
 	}
-	private File image;   //image要跟页面上传文件处的name一致
-	    private String imageFileName;
-	    private String imageContentType;
+
+	private File image;
+	private String imageFileName;
+	private String imageContentType;
 
 	public File getImage() {
 		return image;
@@ -117,7 +119,6 @@ public class FolderAction extends ActionSupport implements
 	}
 
 	private String uuid;
-	
 
 	public String getUuid() {
 		return uuid;
@@ -127,33 +128,32 @@ public class FolderAction extends ActionSupport implements
 		this.uuid = uuid;
 	}
 
-	public String upload()
-    {
-    	if(image!=null)
-    	{
-    	File basePath = new File(ServletActionContext.getServletContext().getRealPath("cache"));
-    	if(!basePath.exists()){  
-             basePath.mkdirs();  
-        } 
-    	uuid = UUID.getUUID()+"_"+imageFileName.substring(imageFileName.lastIndexOf("."));
-    	File cache = new File(basePath.getAbsolutePath()+File.separator+uuid);
-    	if(cache.exists())
-    	{
-    		cache.delete();
-    	}
-    	image.renameTo(cache); 
-    	}
-    	return "upload";
-    }
+	public String upload() {
+		if (image != null) {
+			File basePath = new File(ServletActionContext.getServletContext()
+					.getRealPath("cache"));
+			if (!basePath.exists()) {
+				basePath.mkdirs();
+			}
+			uuid = UUID.getUUID() + "_"
+					+ imageFileName.substring(imageFileName.lastIndexOf("."));
+			File cache = new File(basePath.getAbsolutePath() + File.separator
+					+ uuid);
+			if (cache.exists()) {
+				cache.delete();
+			}
+			image.renameTo(cache);
+		}
+		return "upload";
+	}
+
 	private List<Folder> folders;
 
-
-	public String folders()
-	{
+	public String folders() {
 		folders = folderService.listFolders();
 		return "folders";
 	}
-	
+
 	private List<String> marks;
 
 	public List<String> getMarks() {
@@ -164,29 +164,26 @@ public class FolderAction extends ActionSupport implements
 		this.marks = marks;
 	}
 
-	public String photo()
-	{	
-	    folders = folderService.listFullFolders();
-	    List<Photo> temp = folderService.listMarks();
-	    List<String> filter = new ArrayList<String>();
-	    for(Photo photo:temp)
-	    {
-	    	if(!filter.contains(photo.getDescription()))
-	    	{
-	    		filter.add(photo.getDescription());
-	    	}
-	    }
-	    marks = filter;
+	public String photo() {
+		folders = folderService.listFullFolders();
+		List<Photo> temp = folderService.listMarks();
+		List<String> filter = new ArrayList<String>();
+		for (Photo photo : temp) {
+			if (!filter.contains(photo.getDescription())) {
+				filter.add(photo.getDescription());
+			}
+		}
+		marks = filter;
 		return "photo";
 	}
 
-    private String search;
+	private String search;
+
 	public String getSearch() {
 		return search;
 	}
 
 	private String photoname;
-	
 
 	public String getPhotoname() {
 		return photoname;
@@ -196,58 +193,53 @@ public class FolderAction extends ActionSupport implements
 		this.photoname = photoname;
 	}
 
-	public void download()
-	{
+	public void download() {
 		this.servletResponse.setContentType("application/octet-stream");
-		this.servletResponse.addHeader(
-				"Content-Disposition",
-				new StringBuilder("attachment;filename=")
-						.append(photoname).toString());
+		this.servletResponse.addHeader("Content-Disposition",
+				new StringBuilder("attachment;filename=").append(photoname)
+						.toString());
 		try {
 			OutputStream out = this.servletResponse.getOutputStream();
-			File basePath = new File(ServletActionContext.getServletContext().getRealPath("xiaoming"));
-			File file = new File(basePath.getAbsolutePath()+File.separator+photoname);
-			FileInputStream fi = new FileInputStream (file);
+			File basePath = new File(ServletActionContext.getServletContext()
+					.getRealPath("xiaoming"));
+			File file = new File(basePath.getAbsolutePath() + File.separator
+					+ photoname);
+			FileInputStream fi = new FileInputStream(file);
 			byte buffer[] = new byte[4096];
 			int read;
-			while((read=fi.read(buffer))!=-1)
-			{
-				out.write(buffer,0,read);
+			while ((read = fi.read(buffer)) != -1) {
+				out.write(buffer, 0, read);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public void setSearch(String search) {
 		this.search = search;
 	}
-	
 
-	public void listPhotos() throws UnsupportedEncodingException
-	{
+	public void listPhotos() throws UnsupportedEncodingException {
 		List<Photo> list = null;
-		if(folderid!=-1)
-		{
-			 list = folderService.listPhotos(folderid);
-		}
-		else if(search!=null)
-		{
-			search =  URLDecoder.decode(search,"UTF-8");
-			System.out.println("listphotos"+search);
+		if (folderid != -1) {
+			list = folderService.listPhotos(folderid);
+		} else if (search != null) {
+			search = URLDecoder.decode(search, "UTF-8");
+			System.out.println("listphotos" + search);
 			list = folderService.listPhotos(search);
 		}
-		if(list!=null)
-		{
-		for(Photo photo :list)
-		{
-			photo.setFolder(null);
-		}
+		if (list != null) {
+			for (Photo photo : list) {
+				photo.setFolder(null);
+			}
 		}
 		this.response(Util.Entity2Json(list));
 	}
+
 	private String newMark;
 	private int photoid;
+
 	public String getNewMark() {
 		return newMark;
 	}
@@ -259,9 +251,9 @@ public class FolderAction extends ActionSupport implements
 	public int getPhotoid() {
 		return photoid;
 	}
-	public void updatePhotoMark()
-	{
-		Photo photo = this.folderService.updatePhotoMark(photoid,newMark);
+
+	public void updatePhotoMark() {
+		Photo photo = this.folderService.updatePhotoMark(photoid, newMark);
 		photo.setFolder(null);
 		this.response(Util.Entity2Json(photo));
 	}
@@ -270,16 +262,15 @@ public class FolderAction extends ActionSupport implements
 		this.photoid = photoid;
 	}
 
-	public void listFolders()
-	{
+	public void listFolders() {
 		List<Folder> list = folderService.listFolders();
-		for(Folder folder : list)
-		{
+		for (Folder folder : list) {
 			folder.setPhotos(null);
 			folder.setFengmian(null);
 		}
 		this.response(Util.Entity2Json(list));
 	}
+
 	public List<Folder> getFolders() {
 		return folders;
 	}
@@ -287,8 +278,9 @@ public class FolderAction extends ActionSupport implements
 	public void setFolders(List<Folder> folders) {
 		this.folders = folders;
 	}
-	
+
 	private String jsonString;
+
 	public String getJsonString() {
 		return jsonString;
 	}
@@ -297,19 +289,18 @@ public class FolderAction extends ActionSupport implements
 		this.jsonString = jsonString;
 	}
 
-	public void saveImages()
-	{
-		List<Cache> list = Util.gson.fromJson(jsonString,  
-	                new TypeToken<List<Cache>>() {  
-	                }.getType());
-		this.folderService.saveImages(list,folderid);
+	public void saveImages() {
+		List<Cache> list = Util.gson.fromJson(jsonString,
+				new TypeToken<List<Cache>>() {
+				}.getType());
+		this.folderService.saveImages(list, folderid);
 		response("{'msg':'ok'}");
 	}
 
 	@Override
 	public void setServletResponse(HttpServletResponse servletResponse) {
 		// TODO Auto-generated method stub
-		this.servletResponse=servletResponse;
+		this.servletResponse = servletResponse;
 	}
 
 }

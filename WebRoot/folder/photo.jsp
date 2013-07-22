@@ -16,13 +16,14 @@ int sliders = 1;
 int stuff = 0;
 if(folders!=null)
 {
-	stuff = 6-folders.size()%6;
 	if(folders.size()%6==0)
 		sliders = folders.size()/6;
 	else
+	{
 	    sliders = Math.round(folders.size()/6+0.5f);
+	    stuff = 6-folders.size()%6;
+	}
 }
-
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -217,7 +218,7 @@ if(folders!=null)
 
         #folders
         {
-            width:1044px;
+            width:1058px;
             height: 162px;
             margin: auto;
             list-style: none;
@@ -226,7 +227,7 @@ if(folders!=null)
         }
         #folders_ul
         {
-            width: <%=sliders*1044+sliders*12%>px;
+            width: <%=sliders*1044+sliders*14%>px;
         }
         #folders li
         {

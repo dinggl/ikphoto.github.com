@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="BaiduPhoto"
+  name="IKPhoto"
   id="myeclipse.1374160976045"
   context-root="/BaiduPhoto"
   j2ee-spec="6.0"
-  archive="BaiduPhoto.war">
+  archive="IKPhoto.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />
   </attributes>
